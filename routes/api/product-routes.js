@@ -6,7 +6,7 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', (req, res) => {
   try {
-    const productData = await Product.findAll();
+    const productData = Product.findAll();
     res.status(200).json(productData);
   } catch (err) {
     res.status(500).json(err);
@@ -16,8 +16,11 @@ router.get('/', (req, res) => {
 // get one product
 router.get('/:id', (req, res) => {
   try {
-    const productData = await Location.findByPk(req.params.id, {
-      include: [{ model: Category, as: 'Category_id' }]
+    const productData = Product.findOne({
+      where:{
+        id:req.params.id
+      },
+      include: [{ model: Category, through:productTag }]
     });
 
     if (!productData) {
@@ -34,7 +37,7 @@ router.get('/:id', (req, res) => {
 // create new product
 router.post('/', (req, res) => {
     try {
-      const productData = await Product.create(req.body);
+      const productData = Product.create(req.body);
       res.status(200).json(productData);
     } catch (err) {
       res.status(400).json(err);
