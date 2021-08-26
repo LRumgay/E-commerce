@@ -7,10 +7,15 @@ router.get('/', (req, res) => {
   // find all categories
   // be sure to include its associated Products
   try {
-    const category = Category.findAll({
+    // const category = 
+    Category.findAll({
       include:[Product],
-    });
-    res.status(200).json(category);
+    })
+    .then (category => 
+      res.status(200).json(category)
+
+      );
+      
   } catch (err) {
     res.status(500).json(err);
   }
